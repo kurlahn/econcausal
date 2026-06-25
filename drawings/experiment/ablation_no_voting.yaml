@@ -1,0 +1,5 @@
+extends: ../base.yaml
+name: ablation_no_voting
+extraction:
+  passes: 1
+  vote_threshold: 0.0

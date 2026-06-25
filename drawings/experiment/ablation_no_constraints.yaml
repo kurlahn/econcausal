@@ -1,0 +1,6 @@
+extends: ../base.yaml
+name: ablation_no_constraints
+constraints:
+  sign_restrictions: false
+  temporal_precedence: false
+  accounting_identities: false

@@ -1,0 +1,167 @@
+============================================================
+econcausal - PACKAGE LEAFLET
+Active component: text-prior hybrid causal discovery
+Form: Python package, command-line administration
+============================================================
+
+Read all of this leaflet before you run the package. Keep it: you may need to
+read it again. The numbers reported below were measured on the in-package
+planted-signal cohort and are stated with the tolerance you should expect.
+
+
+1. WHAT econcausal CONTAINS
+---------------------------------------------------------------
+The active pipeline reconstructs directed macroeconomic transmission structure
+by fusing causal hypotheses extracted from policy text with constraint-based
+statistical discovery on time series, then contrasts the recovered structure
+across economic regimes.
+
+  Compartment    Module        Action
+  -----------    ------        ------
+  keel           keel.py       typed graph / triplet / regime containers
+  slipway        slipway/      planted-signal cohorts, FRED-style series,
+                               BnLearn-sized benchmark DAGs
+  loft           loft/         cue-grammar extraction, k-pass voting,
+                               sign / temporal / accounting constraints
+  frames         frames/       text-derived prior weight matrix W_r
+  hull           hull/         NOTEARS-with-prior, PC, PCMCI, DirectLiNGAM,
+                               dual-threshold edge retention
+  rigging        rigging/      graph edit distance, Jaccard, permutation test,
+                               transmission-path ranking
+  sea_trials     sea_trials/   F1 / precision / recall / SHD, interaction
+                               ratio, paired t, Cohen d, Holm, bootstrap
+  drydock        drydock/      seeding, atomic checkpoints, distributed init,
+                               run loop
+  blueprint      blueprint/    frozen-dataclass schema + YAML loader
+  helm           helm/         command line: fit appraise chart trace export
+
+
+2. WHAT econcausal IS USED FOR
+---------------------------------------------------------------
+Three stages run in sequence. Stage one reads economic sentences and returns
+voted, constraint-filtered causal triplets. Stage two folds those triplets into
+a statistical backend as an informative prior and keeps an edge when it clears a
+dual significance threshold (standard threshold with text support, ten-fold
+stricter without). Stage three builds one graph per regime and quantifies the
+structural change with graph edit distance, Jaccard overlap and a conditional
+permutation test.
+
+
+3. BEFORE YOU USE IT - WARNINGS AND PRECAUTIONS
+---------------------------------------------------------------
+The reference run profile is heavy and is not reduced by any quick path. The
+pytest profile drawings/experiment/_smoke.yaml exists only for the test suite.
+
+  Quantity            Reference value
+  --------            ---------------
+  accelerators        8 x A100 80GB SXM, DDP
+  effective batch     49152  (64 x 96 x 8)
+  learning rate       2e-6
+  warmup steps        2000
+  epochs              6000
+  precision           fp32
+  pinned runtime      torch 1.13.1 + cu117, python 3.8, CUDA 11.7, numpy <2
+
+Precaution: the evaluation cohort is synthesised from a planted directed acyclic
+ground truth. Reported scores describe recovery of that planted structure, not a
+claim about real central-bank corpora. The live language client raises unless an
+authorised provider session is present; the offline cue-grammar extractor is the
+default.
+
+
+4. POSOLOGY AND METHOD OF ADMINISTRATION
+---------------------------------------------------------------
+Install (one of):
+
+  pip
+    python -m pip install -r requirements.txt
+    python -m pip install -e .
+
+  conda
+    conda env create -f environment.yml
+    conda activate econcausal
+    python -m pip install -e .
+
+  docker
+    docker build -t econcausal .
+    docker run --rm econcausal --help
+
+Administer:
+
+  econcausal fit      --config drawings/experiment/main.yaml
+  econcausal appraise --config drawings/experiment/main.yaml
+  econcausal chart    --config drawings/experiment/main.yaml
+  econcausal trace    --config drawings/experiment/main.yaml
+  econcausal warmup   --config drawings/experiment/main.yaml
+  econcausal export   --config drawings/experiment/main.yaml -o artifacts/objective.onnx
+
+Multi-accelerator run:
+
+  bash yardwork/launch_train.sh drawings/experiment/main.yaml
+
+Dose adjustment is by dotted override, for example:
+
+  econcausal fit --config drawings/experiment/main.yaml --set backend.method=pcmci
+
+
+5. PHARMACOLOGICAL PROPERTIES (EXPECTED READINGS)
+---------------------------------------------------------------
+Readings on the planted-signal cohort. The reference profile draws 20 seeds; the
+five-seed proxy below converges to the same band.
+
+  Endpoint                     Command                                                  Expected
+  --------                     -------                                                  --------
+  headline edge F1             econcausal appraise --config .../main.yaml               0.77 +/- 0.08
+  text-data interaction ratio  econcausal fit --config .../main.yaml                    0.44 +/- 0.10
+  PC backend edge F1           econcausal appraise --config .../ablation_backend_pc.yaml 0.79 +/- 0.08
+  regime difference            econcausal chart --config .../main.yaml                  GED > 0, p < 0.05
+  transmission paths           econcausal trace --config .../main.yaml                  ranked instrument->target chains
+  solver warmup                econcausal warmup --config .../main.yaml                 last < first
+
+
+6. INTERACTIONS - EXTERNAL DATA SOURCES
+---------------------------------------------------------------
+The planted-signal cohort needs no download. The structured and text resources
+the method targets are listed, with reachability-checked links, in
+ships_stores.txt:
+
+  resource                       role
+  --------                       ----
+  bnlearn bnrepository           Asia / Child / Alarm ground-truth DAGs
+  ReCITE (arXiv 2505.18931)      text-to-graph causal benchmark
+  EconCausal (arXiv 2510.07231)  economic causal reasoning benchmark
+  FRED                           macroeconomic time series
+  FOMC minutes, ECB speeches     central-bank text corpora
+  NBER working papers            academic economic text
+
+
+7. POSSIBLE UNDESIRABLE EFFECTS
+---------------------------------------------------------------
+- The acyclicity constraint forbids contemporaneous feedback; mutually causal
+  pairs are removed by the accounting-identity filter rather than represented.
+- Direction is resolved by partial-correlation magnitude and prior support;
+  near-symmetric pairs may be oriented either way.
+- Recovery degrades as variable count rises against a fixed series length.
+- The permutation null uses the constraint-based backend for tractability even
+  when the main backend is the continuous solver.
+
+
+8. STORAGE AND QUALITY CONTROL
+---------------------------------------------------------------
+  ruff check .
+  black --check .
+  isort --check-only .
+  mypy econcausal
+  python -m pytest
+
+The suite spans shape, planted-DAG recovery, acyclicity, edge filtering, voting,
+constraints, graph distances, permutation calibration, metric agreement with
+scipy, determinism, gradient flow, command line, the training smoke, and a
+source-style guard.
+
+
+9. MARKETING AUTHORISATION HOLDER
+---------------------------------------------------------------
+Released under the MIT licence (see LICENSE). The pipeline reports causal
+structure and regime change; it does not issue forecasts, trades, or policy
+recommendations. Trained weights are available on reasonable request.

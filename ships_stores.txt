@@ -1,0 +1,26 @@
+macroeconomic transmission causal discovery — external data sources
+each entry was reachability-checked; unreachable entries were removed
+
+[structured causal benchmarks]
+bnlearn bayesian network repository (Asia, Child, Alarm ground-truth DAGs)
+  https://www.bnlearn.com/bnrepository/
+  network documentation
+  https://www.bnlearn.com/documentation/networks/
+
+[text-to-graph causal benchmarks]
+ReCITE — Can Large Language Models Infer Causal Relationships from Real-World Text?
+  https://arxiv.org/abs/2505.18931
+EconCausal — A Context-Aware Economic Reasoning Benchmark for Large Language Models
+  https://arxiv.org/abs/2510.07231
+
+[macroeconomic time series]
+Federal Reserve Economic Data (FRED)
+  https://fred.stlouisfed.org/
+
+[economic text corpora]
+Federal Open Market Committee minutes and calendars
+  https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+European Central Bank key speeches
+  https://www.ecb.europa.eu/press/key/html/downloads.en.html
+National Bureau of Economic Research working papers
+  https://www.nber.org/papers

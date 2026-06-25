@@ -1,0 +1,9 @@
+extends: ../base.yaml
+name: supplementary_scaling
+data:
+  n_variables: 20
+  edge_density: 0.2
+  series_length: 800
+comparison:
+  instruments: [FEDFUNDS]
+  targets: [GDPC1, CPIAUCSL, UNRATE]

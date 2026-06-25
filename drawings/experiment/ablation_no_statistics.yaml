@@ -1,0 +1,5 @@
+extends: ../base.yaml
+name: ablation_no_statistics
+backend:
+  alpha: 0.999
+  stringency: 1.0

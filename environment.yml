@@ -1,0 +1,18 @@
+name: econcausal
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.8.18
+  - pytorch=1.13.1
+  - pytorch-cuda=11.7
+  - cudatoolkit=11.7
+  - cudnn=8.5.0
+  - numpy=1.21.6
+  - scipy=1.7.3
+  - pyyaml=5.4.1
+  - pip=23.0
+  - pip:
+      - dacite==1.6.0
+      - click==8.0.4

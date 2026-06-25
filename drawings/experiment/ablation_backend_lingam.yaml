@@ -1,0 +1,4 @@
+extends: ../base.yaml
+name: ablation_backend_lingam
+backend:
+  method: lingam

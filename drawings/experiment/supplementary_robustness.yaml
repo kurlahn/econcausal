@@ -1,0 +1,6 @@
+extends: ../base.yaml
+name: supplementary_robustness
+data:
+  noise_scale: 1.0
+extraction:
+  dropout: 0.3
